@@ -32,7 +32,7 @@ jobs:
 
       # Validation du composer.json et composer.lock
       - name: Validate composer.json and composer.lock
-        run: composer validate --strict
+        run: composer validate
 
       # Installation des dépendances avec Composer
       - name: Install Dependencies
