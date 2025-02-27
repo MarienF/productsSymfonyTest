@@ -1,4 +1,6 @@
 {
+    "name": "votre-nom/votre-projetjspptn",
+    "description": "Description de votre projet Symfony de pute",
     "type": "project",
     "license": "proprietary",
     "minimum-stability": "stable",
