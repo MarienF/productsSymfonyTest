@@ -41,7 +41,8 @@ jobs:
       # Création de la base de données de test (si nécessaire)
       - name: Create test database
         run: |
-          php bin/console --env=test doctrine:database:create --if-not-exists
+          mkdir -p var
+          touch var/test.db
           php bin/console --env=test doctrine:schema:create
         
       # Exécution des tests
