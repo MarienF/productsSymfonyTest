@@ -1,0 +1,84 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Produits{% endblock %}
+
+
+
+{% block body %}
+{% if is_granted('ROLE_USER') %}
+	<div class="container">
+		{% for message in app.flashes('success') %}
+			<div class="alert-success">
+				{{ message }}
+			</div>
+		{% endfor %}
+
+		<div class="search-container">
+			<form method="GET" action="{{ path('app_home') }}" class="search-form">
+				<input 
+					type="text" 
+					name="search" 
+					class="search-input"
+					placeholder="Rechercher un produit..."
+					value="{{ searchTerm }}"
+					autocomplete="off"
+				>
+			</form>
+		</div>
+
+		<button class="btn" id="btn-add">Ajouter un produit</button>
+
+
+		<h2 class="mt-4">Liste des Produits</h2>
+		<div class="products-container">
+			{% for product in products %}
+				<div class="product-card">
+					<div class="product-info">
+						<h3>{{ product.name }}</h3>
+						<p>Prix : {{ product.price }}€</p>
+						<p>{{ product.description }}</p>
+					</div>
+					<div class="product-actions">
+						<a class="btn-edit" data-product-id="{{ product.id }}">
+							Modifier
+						</a>
+						{% if is_granted('ROLE_ADMIN') %}
+							<a class="btn-delete" data-product-id="{{ product.id }}">
+								Supprimer
+							</a>
+						{% endif %}
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+
+	{# Modale de modification #}
+	<div id="updateModal" class="modal">
+		<div class="modal-content">
+			<span class="close">&times;</span>
+			<h2 id="titreModal">Modifier le produit</h2>
+			<div class="form-group">
+				<label for="name">Nom</label>
+				<input type="text" id="modalName" class="form-control">
+			</div>
+			<div class="form-group">
+				<label for="price">Prix</label>
+				<input type="number" id="modalPrice" class="form-control">
+			</div>
+			<div class="form-group">
+				<label for="description">Description</label>
+				<textarea id="modalDescription" class="form-control"></textarea>
+			</div>
+			<button id="saveButton" class="btn">Valider</button>
+		</div>
+	</div>
+	<a href="{{ path('app_logout') }}">Déconnexion</a>
+{% else %}
+	{# Menu pour visiteurs #}
+	<a href="{{ path('app_login') }}" class="btn">Connexion</a>
+	<a href="{{ path('app_register') }}" class="btn">Inscription</a>
+{% endif %}
+{% endblock %}
+
+

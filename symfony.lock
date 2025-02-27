@@ -262,15 +262,6 @@
             "templates/base.html.twig"
         ]
     },
-    "symfony/ux-turbo": {
-        "version": "2.23",
-        "recipe": {
-            "repo": "github.com/symfony/recipes",
-            "branch": "main",
-            "version": "2.20",
-            "ref": "c85ff94da66841d7ff087c19cbcd97a2df744ef9"
-        }
-    },
     "symfony/validator": {
         "version": "7.2",
         "recipe": {
@@ -295,6 +286,9 @@
             "config/packages/web_profiler.yaml",
             "config/routes/web_profiler.yaml"
         ]
+    },
+    "symfonycasts/verify-email-bundle": {
+        "version": "v1.17.3"
     },
     "twig/extra-bundle": {
         "version": "v3.19.0"
