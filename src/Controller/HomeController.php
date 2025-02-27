@@ -122,7 +122,7 @@ class HomeController extends AbstractController
 		return new JsonResponse($formattedProducts);
 	}
 
-
+//sdfsdfssfsfdf
 	#[Route('api/products/delete/{id}', name: 'api_delete_product')]
 	//#[IsGranted('ROLE_ADMIN', message: 'Vous devez être administrateur pour modifier un produit')]
 	public function deleteProduct(Product $product, EntityManagerInterface $entityManager): Response
@@ -133,7 +133,7 @@ class HomeController extends AbstractController
 				'error' => 'Accès refusé. Vous devez être administrateur pour effectuer cette action.'
 			], 403);
 		}
-		
+
 		$entityManager->remove($product);
 		$entityManager->flush();
 		
