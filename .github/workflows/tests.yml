@@ -1,0 +1,49 @@
+name: Symfony Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Symfony (PHP ${{ matrix.php-versions }})
+    runs-on: ubuntu-latest
+    
+    # Vous pouvez tester sur plusieurs versions de PHP
+    strategy:
+      fail-fast: false
+      matrix:
+        php-versions: ['8.1', '8.2', '8.4']
+    
+    steps:
+      # Récupération du code source
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Configuration de PHP avec les extensions nécessaires
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-versions }}
+          extensions: mbstring, xml, ctype, iconv, intl, pdo, pdo_mysql, dom, filter, gd, json, opcache
+          coverage: none
+
+      # Validation du composer.json et composer.lock
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
+
+      # Installation des dépendances avec Composer
+      - name: Install Dependencies
+        run: composer install --prefer-dist --no-progress
+
+      # Création de la base de données de test (si nécessaire)
+      - name: Create test database
+        run: |
+          php bin/console --env=test doctrine:database:create --if-not-exists
+          php bin/console --env=test doctrine:schema:create
+        
+      # Exécution des tests
+      - name: Run Tests
+        run: php bin/phpunit
