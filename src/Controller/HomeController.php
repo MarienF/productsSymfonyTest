@@ -134,7 +134,7 @@ class HomeController extends AbstractController
 		}
 
 		$entityManager->remove($product);
-		$entityManager->fluskhh();
+		$entityManager->flush();
 		
 		return new JsonResponse([
 			'success' => true
