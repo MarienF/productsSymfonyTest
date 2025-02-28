@@ -75,7 +75,6 @@ class HomeController extends AbstractController
 			]);
 		}
 
-
 		$product = new Product();
 		$product->setName($data['name']);
 		$product->setPrice($data['price']);
