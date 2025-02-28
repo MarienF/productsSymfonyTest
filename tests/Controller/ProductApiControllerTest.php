@@ -81,7 +81,7 @@ class ProductApiControllerTest extends WebTestCase
         $newProductData = [
             'name' => 'Produit de test',
             'price' => 99.99,
-            'description' => 'Description du produit de test'
+            'description' => 'Description du produit ddddde test'
         ];
         
         // Envoie une requête POST avec les données
@@ -109,4 +109,41 @@ class ProductApiControllerTest extends WebTestCase
         $this->assertNotNull($product);
         $this->assertEquals(99.99, $product->getPrice());
     }
+
+	public function testDeleteProduct(): void {
+		// Crée un client HTTP
+        $client = static::createClient();
+		$userRepository = static::getContainer()->get(UserRepository::class);
+		$testUser = $userRepository->findOneByEmail('admin@example.com');
+		
+		if (!$testUser) {
+			$testUser = new User();
+			$testUser->setEmail('admin@example.com');
+			$testUser->setRoles(['ROLE_ADMIN']);
+			$passwordHasher = static::getContainer()->get('security.user_password_hasher');
+			$testUser->setPassword($passwordHasher->hashPassword($testUser, 'password'));
+			
+			$entityManager = static::getContainer()->get('doctrine')->getManager();
+			$entityManager->persist($testUser);
+			$entityManager->flush();
+		}
+    
+		// 2. Simuler la connexion
+		$client->loginUser($testUser);
+
+		// Recupere un produit
+		$entityManager = $client->getContainer()->get('doctrine')->getManager();
+        $productRepository = $entityManager->getRepository(Product::class);
+        
+        $product = $productRepository->findOneBy(['name' => 'Produit de test']);
+
+		// Envoie une requete pour supprimer le produit
+		$client->request('GET', '/api/products/delete/' . $product->getId());
+        
+        // Vérifie le statut de la réponse
+        $this->assertEquals(Response::HTTP_OK, $client->getResponse()->getStatusCode());
+        
+        // Décode le contenu JSON
+        $data = json_decode($client->getResponse()->getContent(), true);
+	}
 }
